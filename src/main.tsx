@@ -5,6 +5,7 @@ import './index.css';
 import { useAuthStore } from './store/authStore';
 import { supabase } from './lib/supabase';
 import { PerformanceMonitor, analyzeBundleSize } from './utils/performance';
+import { registerSW } from './utils/serviceWorker';
 
 function AuthProvider() {
   const { setSession, setLoading } = useAuthStore();
@@ -41,6 +42,9 @@ function AuthProvider() {
 
 // Performance monitoring
 PerformanceMonitor.mark('app-start');
+
+// Register service worker
+registerSW();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

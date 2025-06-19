@@ -1,26 +1,28 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { AuthForm } from './components/auth/AuthForm';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { LoadingSpinner } from './components/ui/LoadingSpinner';
 import { useAuthStore } from './store/authStore';
+import { useRoutePreloading } from './hooks/useRoutePreloading';
+import { OfflineNotification } from './components/ui/OfflineNotification';
 
 // Lazy load pages for better performance
-const Landing = React.lazy(() => import('./pages/Landing'));
-const Dashboard = React.lazy(() => import('./pages/Dashboard'));
-const CreatePost = React.lazy(() => import('./pages/CreatePost'));
-const AutoReply = React.lazy(() => import('./pages/AutoReply'));
-const Analytics = React.lazy(() => import('./pages/Analytics'));
-const VideoAnalytics = React.lazy(() => import('./pages/VideoAnalytics'));
-const Settings = React.lazy(() => import('./pages/Settings'));
-const ThreadBuilder = React.lazy(() => import('./pages/ThreadBuilder'));
-const EngagementBooster = React.lazy(() => import('./pages/EngagementBooster'));
-const VideoGenerator = React.lazy(() => import('./pages/VideoGenerator'));
-const Calendar = React.lazy(() => import('./pages/Calendar'));
-const Pricing = React.lazy(() => import('./pages/Pricing'));
-const Teams = React.lazy(() => import('./pages/Teams'));
-const SocialConnect = React.lazy(() => import('./pages/SocialConnect'));
+const Landing = lazy(() => import('./pages/Landing'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const CreatePost = lazy(() => import('./pages/CreatePost'));
+const AutoReply = lazy(() => import('./pages/AutoReply'));
+const Analytics = lazy(() => import('./pages/Analytics'));
+const VideoAnalytics = lazy(() => import('./pages/VideoAnalytics'));
+const Settings = lazy(() => import('./pages/Settings'));
+const ThreadBuilder = lazy(() => import('./pages/ThreadBuilder'));
+const EngagementBooster = lazy(() => import('./pages/EngagementBooster'));
+const VideoGenerator = lazy(() => import('./pages/VideoGenerator'));
+const Calendar = lazy(() => import('./pages/Calendar'));
+const Pricing = lazy(() => import('./pages/Pricing'));
+const Teams = lazy(() => import('./pages/Teams'));
+const SocialConnect = lazy(() => import('./pages/SocialConnect'));
 
 // Loading fallback component
 function PageLoadingFallback() {
@@ -64,6 +66,9 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { user, loading } = useAuthStore();
+  
+  // Preload routes based on current location
+  useRoutePreloading();
 
   if (loading) {
     return <PageLoadingFallback />;
@@ -72,6 +77,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
+        <OfflineNotification className="sticky top-16 z-40 mx-auto max-w-7xl mt-2" />
         <Routes>
           {/* Public routes with lazy loading */}
           <Route 
@@ -228,6 +234,26 @@ export default function App() {
                   <SocialConnect />
                 </Layout>
               </ProtectedRoute>
+            } 
+          />
+          
+          {/* Offline fallback route */}
+          <Route 
+            path="/offline" 
+            element={
+              <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center p-8 max-w-md">
+                  <WifiOff className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <h1 className="text-2xl font-bold text-gray-800 mb-2">You're Offline</h1>
+                  <p className="text-gray-600 mb-6">
+                    It looks like you're not connected to the internet. Some features may be limited.
+                  </p>
+                  <Button onClick={() => window.location.reload()}>
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Try Again
+                  </Button>
+                </div>
+              </div>
             } 
           />
           

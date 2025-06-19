@@ -1,6 +1,8 @@
 import React from 'react';
 import { Navigation } from './Navigation';
 import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { OfflineIndicator } from '../ui/OfflineIndicator';
+import { PWAInstallPrompt } from '../ui/PWAInstallPrompt';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,6 +17,8 @@ export function Layout({ children }: LayoutProps) {
           {children}
         </ErrorBoundary>
       </main>
+      <OfflineIndicator />
+      <PWAInstallPrompt />
     </div>
   );
 }

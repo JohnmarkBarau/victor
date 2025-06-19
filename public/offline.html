@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SocialSync AI - Offline</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      text-align: center;
+      padding: 40px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 24px;
+      color: #6b7280;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    p {
+      color: #4b5563;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #3b82f6;
+      color: white;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+    .button:hover {
+      background-color: #2563eb;
+    }
+    .button-icon {
+      margin-right: 8px;
+      width: 16px;
+      height: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m-3.536-3.536a5 5 0 010-7.072m-3.182 3.182a1 1 0 11-1.414-1.414 1 1 0 011.414 1.414z" />
+      <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" />
+    </svg>
+    <h1>You're Offline</h1>
+    <p>It looks like you're not connected to the internet. SocialSync AI requires an internet connection for most features.</p>
+    <p>Some previously viewed content may be available offline.</p>
+    <a href="/" class="button">
+      <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+      Try Again
+    </a>
+  </div>
+  <script>
+    // Check if we're back online and reload the page
+    window.addEventListener('online', function() {
+      window.location.reload();
+    });
+    
+    // Add a button click handler
+    document.querySelector('.button').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

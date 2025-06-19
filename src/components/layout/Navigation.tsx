@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, LogOut, User, Link2, Menu, X } from 'lucide-react';
+import { ChevronDown, LogOut, User, Link2, Menu, X, Wifi, WifiOff } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { Button } from '../ui/Button';
 import { PreloadingLink } from './PreloadingLink';
+import { useOfflineStatus } from '../../hooks/useOfflineStatus';
+import { ConnectionQualityIndicator } from '../ui/ConnectionQualityIndicator';
 
 export function Navigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isOffline = useOfflineStatus();
 
   const handleSignOut = async () => {
     try {
@@ -162,6 +165,9 @@ export function Navigation() {
                 >
                   Settings
                 </PreloadingLink>
+                
+                {/* Network status indicator */}
+                <ConnectionQualityIndicator showDetails={false} />
               </div>
 
               {/* Mobile menu button */}
@@ -206,6 +212,14 @@ export function Navigation() {
             </>
           ) : (
             <div className="flex items-center space-x-4">
+              {/* Network status indicator */}
+              {isOffline && (
+                <div className="text-red-500 flex items-center gap-1 text-sm">
+                  <WifiOff className="w-4 h-4" />
+                  <span className="hidden sm:inline">Offline</span>
+                </div>
+              )}
+              
               <PreloadingLink
                 to="/auth"
                 className="text-gray-600 hover:text-gray-900 transition-colors"
@@ -277,6 +291,12 @@ export function Navigation() {
               >
                 Settings
               </PreloadingLink>
+              
+              {/* Network status */}
+              <div className="px-4 py-2 flex items-center gap-2">
+                <ConnectionQualityIndicator showDetails={true} />
+              </div>
+              
               <button
                 onClick={() => {
                   handleSignOut();
