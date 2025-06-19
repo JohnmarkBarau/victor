@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, LogOut, User, Link2, Menu, X } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { Button } from '../ui/Button';
+import { PreloadingLink } from './PreloadingLink';
 
 export function Navigation() {
   const location = useLocation();
@@ -32,7 +33,7 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link to={user ? "/dashboard" : "/"} className="flex items-center gap-3">
+            <PreloadingLink to={user ? "/dashboard" : "/"} className="flex items-center gap-3">
               <img 
                 src="/SocialSync AI Logo with Sync Arrow and Network Symbol.png" 
                 alt="SocialSync AI" 
@@ -43,21 +44,21 @@ export function Navigation() {
                 }}
               />
               <span className="text-xl font-bold text-gray-900">SocialSync AI</span>
-            </Link>
+            </PreloadingLink>
           </div>
 
           {user ? (
             <>
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center space-x-8">
-                <Link
+                <PreloadingLink
                   to="/dashboard"
                   className={`text-gray-600 hover:text-gray-900 transition-colors ${
                     location.pathname === '/dashboard' ? 'text-gray-900 font-medium' : ''
                   }`}
                 >
                   Dashboard
-                </Link>
+                </PreloadingLink>
 
                 <div className="relative group">
                   <button className="flex items-center gap-1 text-gray-600 group-hover:text-gray-900 transition-colors">
@@ -65,30 +66,30 @@ export function Navigation() {
                     <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
                   </button>
                   <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 w-48 bg-white border rounded-lg shadow-lg mt-2 py-2 transition-all duration-200 z-50">
-                    <Link
+                    <PreloadingLink
                       to="/create"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       Create Post
-                    </Link>
-                    <Link
+                    </PreloadingLink>
+                    <PreloadingLink
                       to="/calendar"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       Smart Calendar
-                    </Link>
-                    <Link
+                    </PreloadingLink>
+                    <PreloadingLink
                       to="/thread-builder"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       Thread Builder
-                    </Link>
-                    <Link
+                    </PreloadingLink>
+                    <PreloadingLink
                       to="/video"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       Video Generator
-                    </Link>
+                    </PreloadingLink>
                   </div>
                 </div>
 
@@ -98,18 +99,18 @@ export function Navigation() {
                     <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
                   </button>
                   <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 w-48 bg-white border rounded-lg shadow-lg mt-2 py-2 transition-all duration-200 z-50">
-                    <Link
+                    <PreloadingLink
                       to="/auto-reply"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       Auto-Reply
-                    </Link>
-                    <Link
+                    </PreloadingLink>
+                    <PreloadingLink
                       to="/engagement"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       Engagement Booster
-                    </Link>
+                    </PreloadingLink>
                   </div>
                 </div>
 
@@ -119,31 +120,31 @@ export function Navigation() {
                     <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
                   </button>
                   <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 w-48 bg-white border rounded-lg shadow-lg mt-2 py-2 transition-all duration-200 z-50">
-                    <Link
+                    <PreloadingLink
                       to="/analytics"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       General Analytics
-                    </Link>
-                    <Link
+                    </PreloadingLink>
+                    <PreloadingLink
                       to="/video-analytics"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       Video Analytics
-                    </Link>
+                    </PreloadingLink>
                   </div>
                 </div>
 
-                <Link
+                <PreloadingLink
                   to="/teams"
                   className={`text-gray-600 hover:text-gray-900 transition-colors ${
                     location.pathname === '/teams' ? 'text-gray-900 font-medium' : ''
                   }`}
                 >
                   Teams
-                </Link>
+                </PreloadingLink>
 
-                <Link
+                <PreloadingLink
                   to="/social-connect"
                   className={`text-gray-600 hover:text-gray-900 transition-colors ${
                     location.pathname === '/social-connect' ? 'text-gray-900 font-medium' : ''
@@ -151,16 +152,16 @@ export function Navigation() {
                 >
                   <Link2 className="w-4 h-4 inline mr-1" />
                   Connect
-                </Link>
+                </PreloadingLink>
 
-                <Link
+                <PreloadingLink
                   to="/settings"
                   className={`text-gray-600 hover:text-gray-900 transition-colors ${
                     location.pathname === '/settings' ? 'text-gray-900 font-medium' : ''
                   }`}
                 >
                   Settings
-                </Link>
+                </PreloadingLink>
               </div>
 
               {/* Mobile menu button */}
@@ -186,12 +187,12 @@ export function Navigation() {
                     <ChevronDown className="w-4 h-4" />
                   </button>
                   <div className="absolute right-0 invisible group-hover:visible opacity-0 group-hover:opacity-100 w-48 bg-white border rounded-lg shadow-lg mt-2 py-2 transition-all duration-200 z-50">
-                    <Link
+                    <PreloadingLink
                       to="/settings"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       Profile Settings
-                    </Link>
+                    </PreloadingLink>
                     <button
                       onClick={handleSignOut}
                       className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
@@ -205,18 +206,18 @@ export function Navigation() {
             </>
           ) : (
             <div className="flex items-center space-x-4">
-              <Link
+              <PreloadingLink
                 to="/auth"
                 className="text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Sign In
-              </Link>
-              <Link
+              </PreloadingLink>
+              <PreloadingLink
                 to="/auth"
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Sign Up
-              </Link>
+              </PreloadingLink>
             </div>
           )}
         </div>
@@ -225,7 +226,7 @@ export function Navigation() {
         {user && isMobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="space-y-2">
-              <Link
+              <PreloadingLink
                 to="/dashboard"
                 onClick={closeMobileMenu}
                 className={`block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg ${
@@ -233,49 +234,49 @@ export function Navigation() {
                 }`}
               >
                 Dashboard
-              </Link>
-              <Link
+              </PreloadingLink>
+              <PreloadingLink
                 to="/create"
                 onClick={closeMobileMenu}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
               >
                 Create Post
-              </Link>
-              <Link
+              </PreloadingLink>
+              <PreloadingLink
                 to="/calendar"
                 onClick={closeMobileMenu}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
               >
                 Smart Calendar
-              </Link>
-              <Link
+              </PreloadingLink>
+              <PreloadingLink
                 to="/analytics"
                 onClick={closeMobileMenu}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
               >
                 Analytics
-              </Link>
-              <Link
+              </PreloadingLink>
+              <PreloadingLink
                 to="/teams"
                 onClick={closeMobileMenu}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
               >
                 Teams
-              </Link>
-              <Link
+              </PreloadingLink>
+              <PreloadingLink
                 to="/social-connect"
                 onClick={closeMobileMenu}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
               >
                 Connect Accounts
-              </Link>
-              <Link
+              </PreloadingLink>
+              <PreloadingLink
                 to="/settings"
                 onClick={closeMobileMenu}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
               >
                 Settings
-              </Link>
+              </PreloadingLink>
               <button
                 onClick={() => {
                   handleSignOut();

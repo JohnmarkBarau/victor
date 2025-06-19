@@ -1,63 +1,95 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { AuthForm } from './components/auth/AuthForm';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
-import { useAuthStore } from './store/authStore';
 import { LoadingSpinner } from './components/ui/LoadingSpinner';
-import Landing from './pages/Landing';
+import { useAuthStore } from './store/authStore';
 
-// Import pages
-import Dashboard from './pages/Dashboard';
-import CreatePost from './pages/CreatePost';
-import AutoReply from './pages/AutoReply';
-import Analytics from './pages/Analytics';
-import VideoAnalytics from './pages/VideoAnalytics';
-import Settings from './pages/Settings';
-import ThreadBuilder from './pages/ThreadBuilder';
-import EngagementBooster from './pages/EngagementBooster';
-import VideoGenerator from './pages/VideoGenerator';
-import Calendar from './pages/Calendar';
-import Pricing from './pages/Pricing';
-import Teams from './pages/Teams';
-import SocialConnect from './pages/SocialConnect';
+// Lazy load pages for better performance
+const Landing = React.lazy(() => import('./pages/Landing'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const CreatePost = React.lazy(() => import('./pages/CreatePost'));
+const AutoReply = React.lazy(() => import('./pages/AutoReply'));
+const Analytics = React.lazy(() => import('./pages/Analytics'));
+const VideoAnalytics = React.lazy(() => import('./pages/VideoAnalytics'));
+const Settings = React.lazy(() => import('./pages/Settings'));
+const ThreadBuilder = React.lazy(() => import('./pages/ThreadBuilder'));
+const EngagementBooster = React.lazy(() => import('./pages/EngagementBooster'));
+const VideoGenerator = React.lazy(() => import('./pages/VideoGenerator'));
+const Calendar = React.lazy(() => import('./pages/Calendar'));
+const Pricing = React.lazy(() => import('./pages/Pricing'));
+const Teams = React.lazy(() => import('./pages/Teams'));
+const SocialConnect = React.lazy(() => import('./pages/SocialConnect'));
+
+// Loading fallback component
+function PageLoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <LoadingSpinner size="lg" text="Loading page..." />
+    </div>
+  );
+}
+
+// Layout loading fallback for protected routes
+function LayoutLoadingFallback() {
+  return (
+    <Layout>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <LoadingSpinner size="lg" text="Loading..." />
+      </div>
+    </Layout>
+  );
+}
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuthStore();
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner size="lg" text="Loading..." />
-      </div>
-    );
+    return <PageLoadingFallback />;
   }
 
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
 
-  return <ErrorBoundary>{children}</ErrorBoundary>;
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<LayoutLoadingFallback />}>
+        {children}
+      </Suspense>
+    </ErrorBoundary>
+  );
 }
 
 export default function App() {
   const { user, loading } = useAuthStore();
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner size="lg" text="Initializing SocialSync AI..." />
-      </div>
-    );
+    return <PageLoadingFallback />;
   }
 
   return (
     <ErrorBoundary>
       <BrowserRouter>
         <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<Landing />} />
-          <Route path="/pricing" element={<Pricing />} />
+          {/* Public routes with lazy loading */}
+          <Route 
+            path="/" 
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <Landing />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/pricing" 
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <Pricing />
+              </Suspense>
+            } 
+          />
           
           {/* Auth route - redirect to dashboard if already logged in */}
           <Route 
@@ -70,17 +102,21 @@ export default function App() {
             path="/auth/callback/:platform" 
             element={
               <ProtectedRoute>
-                <Layout><SocialConnect /></Layout>
+                <Layout>
+                  <SocialConnect />
+                </Layout>
               </ProtectedRoute>
             } 
           />
           
-          {/* Protected routes */}
+          {/* Protected routes with lazy loading */}
           <Route 
             path="/dashboard" 
             element={
               <ProtectedRoute>
-                <Layout><Dashboard /></Layout>
+                <Layout>
+                  <Dashboard />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -88,7 +124,9 @@ export default function App() {
             path="/create" 
             element={
               <ProtectedRoute>
-                <Layout><CreatePost /></Layout>
+                <Layout>
+                  <CreatePost />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -96,7 +134,9 @@ export default function App() {
             path="/auto-reply" 
             element={
               <ProtectedRoute>
-                <Layout><AutoReply /></Layout>
+                <Layout>
+                  <AutoReply />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -104,7 +144,9 @@ export default function App() {
             path="/analytics" 
             element={
               <ProtectedRoute>
-                <Layout><Analytics /></Layout>
+                <Layout>
+                  <Analytics />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -112,7 +154,9 @@ export default function App() {
             path="/video-analytics" 
             element={
               <ProtectedRoute>
-                <Layout><VideoAnalytics /></Layout>
+                <Layout>
+                  <VideoAnalytics />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -120,7 +164,9 @@ export default function App() {
             path="/settings" 
             element={
               <ProtectedRoute>
-                <Layout><Settings /></Layout>
+                <Layout>
+                  <Settings />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -128,7 +174,9 @@ export default function App() {
             path="/thread-builder" 
             element={
               <ProtectedRoute>
-                <Layout><ThreadBuilder /></Layout>
+                <Layout>
+                  <ThreadBuilder />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -136,7 +184,9 @@ export default function App() {
             path="/engagement" 
             element={
               <ProtectedRoute>
-                <Layout><EngagementBooster /></Layout>
+                <Layout>
+                  <EngagementBooster />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -144,7 +194,9 @@ export default function App() {
             path="/video" 
             element={
               <ProtectedRoute>
-                <Layout><VideoGenerator /></Layout>
+                <Layout>
+                  <VideoGenerator />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -152,7 +204,9 @@ export default function App() {
             path="/calendar" 
             element={
               <ProtectedRoute>
-                <Layout><Calendar /></Layout>
+                <Layout>
+                  <Calendar />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -160,7 +214,9 @@ export default function App() {
             path="/teams" 
             element={
               <ProtectedRoute>
-                <Layout><Teams /></Layout>
+                <Layout>
+                  <Teams />
+                </Layout>
               </ProtectedRoute>
             } 
           />
@@ -168,7 +224,9 @@ export default function App() {
             path="/social-connect" 
             element={
               <ProtectedRoute>
-                <Layout><SocialConnect /></Layout>
+                <Layout>
+                  <SocialConnect />
+                </Layout>
               </ProtectedRoute>
             } 
           />
