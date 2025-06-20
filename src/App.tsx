@@ -1,10 +1,9 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { AuthForm } from './components/auth/AuthForm';
 import { useAuthStore } from './store/authStore';
 import { Loader2 } from 'lucide-react';
-import Landing from './pages/Landing';
 
 // Import pages
 import Dashboard from './pages/Dashboard';
@@ -20,6 +19,7 @@ import Calendar from './pages/Calendar';
 import Pricing from './pages/Pricing';
 import Teams from './pages/Teams';
 import SocialConnect from './pages/SocialConnect';
+import Landing from './pages/Landing';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuthStore();
