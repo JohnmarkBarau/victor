@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Download, X } from 'lucide-react';
 import { Button } from './Button';
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
 interface PWAInstallPromptProps {
   className?: string;
 }

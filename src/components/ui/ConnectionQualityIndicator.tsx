@@ -1,6 +1,5 @@
 import React from 'react';
 import { Wifi, WifiOff, AlertCircle } from 'lucide-react';
-import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 
 interface ConnectionQualityIndicatorProps {
   className?: string;
@@ -11,25 +10,25 @@ export function ConnectionQualityIndicator({
   className = '',
   showDetails = false
 }: ConnectionQualityIndicatorProps) {
-  const network = useNetworkStatus();
+  const [online, setOnline] = React.useState(navigator.onLine);
+  
+  React.useEffect(() => {
+    const handleOnline = () => setOnline(true);
+    const handleOffline = () => setOnline(false);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Determine connection quality
   const getConnectionQuality = () => {
-    if (!network.online) return 'offline';
-    
-    if (!network.effectiveType) return 'unknown';
-    
-    switch (network.effectiveType) {
-      case 'slow-2g':
-      case '2g':
-        return 'poor';
-      case '3g':
-        return 'fair';
-      case '4g':
-        return 'good';
-      default:
-        return 'unknown';
-    }
+    if (!online) return 'offline';
+    return 'good';
   };
 
   const quality = getConnectionQuality();
@@ -43,20 +42,6 @@ export function ConnectionQualityIndicator({
           bgColor: 'bg-red-100',
           textColor: 'text-red-700',
           label: 'Offline'
-        };
-      case 'poor':
-        return {
-          icon: AlertCircle,
-          bgColor: 'bg-yellow-100',
-          textColor: 'text-yellow-700',
-          label: 'Poor Connection'
-        };
-      case 'fair':
-        return {
-          icon: Wifi,
-          bgColor: 'bg-yellow-50',
-          textColor: 'text-yellow-600',
-          label: 'Fair Connection'
         };
       case 'good':
         return {
@@ -89,11 +74,6 @@ export function ConnectionQualityIndicator({
     <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${bgColor} ${textColor} ${className}`}>
       <Icon className="h-4 w-4" />
       <span className="text-xs font-medium">{label}</span>
-      {network.downlink && (
-        <span className="text-xs">
-          ({Math.round(network.downlink)} Mbps)
-        </span>
-      )}
     </div>
   );
 }
