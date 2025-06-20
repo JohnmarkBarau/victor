@@ -1,6 +1,7 @@
 import React from 'react';
 import { WifiOff, RefreshCw } from 'lucide-react';
 import { Button } from './Button';
+import { useOfflineStatus } from '../../hooks/useOfflineStatus';
 
 interface OfflineNotificationProps {
   className?: string;
@@ -13,20 +14,7 @@ export function OfflineNotification({
   message = 'You are currently offline. Some features may be limited.',
   showRefresh = true
 }: OfflineNotificationProps) {
-  const [isOffline, setIsOffline] = React.useState(!navigator.onLine);
-
-  React.useEffect(() => {
-    const handleOnline = () => setIsOffline(false);
-    const handleOffline = () => setIsOffline(true);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+  const isOffline = useOfflineStatus();
 
   if (!isOffline) return null;
 
